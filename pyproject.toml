@@ -1,0 +1,69 @@
+[project]
+name = "muto"
+version = "0.1.0"
+description = "MuTO, 轉職負責於 Model Context Protocol, MCP 的 API 服務器，提供模型上下文管理、任務派發與結果追蹤等核心功能"
+readme = "README.md"
+requires-python = ">=3.13"
+
+# --- Production Dependencies 生產環境依賴 ---
+# 這些是程式運行、部署到伺服器時必須安裝的核心套件
+dependencies = [
+    # ======= Core Web & Framework 核心框架與伺服器 =======
+    "fastapi>=0.135.2",             # Modern Web Framework 核心網頁框架，負責路由與 API 邏輯
+    "uvicorn>=0.42.0",              # ASGI Server 執行 FastAPI 程式的底層高效能網頁伺服器
+    "pydantic-settings>=2.13.1",    # Settings Management 讀取 .env 並驗證環境變數配置
+    "pydantic[email]>=2.12.5",      # Data Validation 資料驗證，額外強化 Email 格式的檢查
+    "python-dotenv>=1.2.2",         # Environment Variables 從 .env 檔案載入變數到環境中
+    # ======= Database & ORM 資料庫與持久化 =======
+    "sqlalchemy>=2.0.48",           # SQL Toolkit 與 ORM，提供資料庫抽象化與物件關聯映射功能
+    "asyncpg>=0.31.0",              # PostgreSQL Async Driver 專為 Postgres 設計的高效能非同步驅動
+    "alembic>=1.18.4",              # Database Migrations 資料庫遷移管理，紀錄資料表結構變更
+    "greenlet>=3.3.2",              # SQLAlchemy Async Helper 輔助 SQLAlchemy 處理非同步協程切換
+    # ======= Redis & Caching 快取與分散式鎖 =======
+    "redis[hiredis]>=7.4.0",        # Redis Client 負責快取、限流與高性能數據解析的，使用 C 擴展提升性能
+    # ======= Network & Resiliency 網路通訊與容錯 =======
+    "httpx>=0.28.1",                # Async HTTP Client 用於發送網路請求給其他 API（支援非同步）
+    "tenacity>=9.1.4",              # Retry Logic 強化網路請求穩定性，實作指數退避重試與錯誤容護
+    # ======= Scalar API 文件套件 =======
+    "scalar-fastapi>=1.8.1",
+    # ======= Task Scheduling & Queue 任務派發與排程 =======
+    "taskiq>=0.12.1",               # Task Queue 非同步任務隊列與排程工具，負責將任務派發至 Redis 並追蹤結果
+    "taskiq-redis>=1.2.2",          # Task Queue Redis Backend，提供快速的任務處理能力
+    # ======= Security & Auth 安全與認證 =======
+    "pyjwt>=2.12.1",                # JSON Web Token 用於實作使用者登入認證的令牌機制
+    "pwdlib[argon2]>=0.3.0",        # Password Hashing 密碼雜湊加密工具，保障用戶密碼安全
+    # Password Hashing 密碼雜湊加密工具，保障用戶密碼安全
+    # ======= Observability & Evaluation 監控日誌與評估優化 =======
+    "structlog>=25.5.0",            # Structured Logging 結構化日誌工具，提供更清晰的日誌輸出與分析能力
+    # ======= Performance Accelerators 效能加速與性能優化 =======
+    "orjson>=3.11.7",               # Fast JSON Serialization 高效能 JSON 序列化與反序列化，透過 Rust 實作的極速解析器，優化 API 吞吐量
+    # ======= AI & MCP Integration AI 與協議對接 =======
+]
+
+# --- Dependency Groups 開發環境工具 ---
+# 這些工具僅在開發時期使用（如檢查格式），不會安裝到正式環境中
+[dependency-groups]
+dev = [
+    # ======= Testing 自動化測試 =======
+    "pytest>=9.0.2",                # Testing Framework 自動化測試框架，確保程式邏輯正確
+    "pytest-asyncio>=1.3.0",        # Async Testing Plugin 支援非同步程式碼的測試，讓測試覆蓋率更全面
+    "ruff>=0.15.8",                 # All-in-one Linter & Formatter 極速的代碼檢查與排版工具
+]
+
+# --- Tool Configuration 外部工具自定義設定 ---
+
+# Ruff 設定：確保程式碼風格統一，減少人為排版錯誤
+[tool.ruff]
+line-length = 88                    # Line Length：設定每行程式碼的最大長度（符合 PEP 8 標準）
+target-version = "py313"            # Target Version：設定目標 Python 版本，讓檢查器支援最新語法
+
+[tool.ruff.lint]
+# Select Rules：啟用的檢查規則組
+select = ["E", "F", "I"]            # E: py codestyle 一般語法錯誤
+                                    # F: Pyflakes 邏輯與語法錯誤 像是未定義變數或重複引用
+                                    # I: isort 自動處理 Import 引用排序與組織、未使用的 import、循環 import 等問題
+
+ignore = []                         # Ignore Rules：忽略特定的警告（目前保持嚴謹，未忽略任何項目）
+
+[tool.ruff.format]
+quote-style = "double"              # Quote Style：強制使用「雙引號」，這是 Python 現代開發的標準慣例
