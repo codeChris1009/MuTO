@@ -19,6 +19,7 @@ dependencies = [
     "sqlalchemy>=2.0.48",           # SQL Toolkit 與 ORM，提供資料庫抽象化與物件關聯映射功能
     "asyncpg>=0.30.0",              # Database Driver 高效能非同步 PostgreSQL 驅動，直連 EIDo
     "pgvector>=0.3.6",              # Vector DB Extension 讓 asyncpg 具備解讀向量型態的能力
+    "greenlet>=3.3.2",              # SQLAlchemy Async Helper 輔助 SQLAlchemy 處理非同步協程切換
     # ======= Redis & Caching 快取讀取 =======
     "redis[hiredis]>=7.4.0",        # Redis Client 讀取快取資料與狀態共享，使用 C 擴展提升性能
     # ======= Network & Resiliency 網路通訊與容錯 =======
