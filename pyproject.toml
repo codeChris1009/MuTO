@@ -12,32 +12,24 @@ dependencies = [
     "fastapi>=0.135.2",             # Modern Web Framework 核心網頁框架，負責路由與 API 邏輯
     "uvicorn>=0.42.0",              # ASGI Server 執行 FastAPI 程式的底層高效能網頁伺服器
     "pydantic-settings>=2.13.1",    # Settings Management 讀取 .env 並驗證環境變數配置
-    "pydantic[email]>=2.12.5",      # Data Validation 資料驗證，額外強化 Email 格式的檢查
     "python-dotenv>=1.2.2",         # Environment Variables 從 .env 檔案載入變數到環境中
-    # ======= Database & ORM 資料庫與持久化 =======
-    "sqlalchemy>=2.0.48",           # SQL Toolkit 與 ORM，提供資料庫抽象化與物件關聯映射功能
-    "asyncpg>=0.31.0",              # PostgreSQL Async Driver 專為 Postgres 設計的高效能非同步驅動
-    "alembic>=1.18.4",              # Database Migrations 資料庫遷移管理，紀錄資料表結構變更
-    "greenlet>=3.3.2",              # SQLAlchemy Async Helper 輔助 SQLAlchemy 處理非同步協程切換
-    # ======= Redis & Caching 快取與分散式鎖 =======
-    "redis[hiredis]>=7.4.0",        # Redis Client 負責快取、限流與高性能數據解析的，使用 C 擴展提升性能
+    # ======= MCP Server MCP 協議伺服器 =======
+    "fastmcp>=2.0.0",               # MCP Server 基於 Model Context Protocol 的技能主機核心，負責動態加載與執行 Skills
+    # ======= Redis & Caching 快取讀取 =======
+    "redis[hiredis]>=7.4.0",        # Redis Client 讀取快取資料與狀態共享，使用 C 擴展提升性能
     # ======= Network & Resiliency 網路通訊與容錯 =======
-    "httpx>=0.28.1",                # Async HTTP Client 用於發送網路請求給其他 API（支援非同步）
+    "httpx>=0.28.1",                # Async HTTP Client 用於發送網路請求給其他內部服務（支援非同步）
     "tenacity>=9.1.4",              # Retry Logic 強化網路請求穩定性，實作指數退避重試與錯誤容護
+    # ======= Security 安全驗證 =======
+    "pyjwt>=2.12.1",                # JSON Web Token 驗證來自 AleT 的請求令牌
     # ======= Scalar API 文件套件 =======
     "scalar-fastapi>=1.8.1",
-    # ======= Task Scheduling & Queue 任務派發與排程 =======
-    "taskiq>=0.12.1",               # Task Queue 非同步任務隊列與排程工具，負責將任務派發至 Redis 並追蹤結果
-    "taskiq-redis>=1.2.2",          # Task Queue Redis Backend，提供快速的任務處理能力
-    # ======= Security & Auth 安全與認證 =======
-    "pyjwt>=2.12.1",                # JSON Web Token 用於實作使用者登入認證的令牌機制
-    "pwdlib[argon2]>=0.3.0",        # Password Hashing 密碼雜湊加密工具，保障用戶密碼安全
-    # Password Hashing 密碼雜湊加密工具，保障用戶密碼安全
-    # ======= Observability & Evaluation 監控日誌與評估優化 =======
+    # ======= Observability 監控日誌 =======
     "structlog>=25.5.0",            # Structured Logging 結構化日誌工具，提供更清晰的日誌輸出與分析能力
-    # ======= Performance Accelerators 效能加速與性能優化 =======
-    "orjson>=3.11.7",               # Fast JSON Serialization 高效能 JSON 序列化與反序列化，透過 Rust 實作的極速解析器，優化 API 吞吐量
-    # ======= AI & MCP Integration AI 與協議對接 =======
+    # ======= Performance Accelerators 效能加速 =======
+    "orjson>=3.11.7",               # Fast JSON Serialization 高效能 JSON 序列化與反序列化，優化 API 吞吐量
+    # ======= Dynamic Module Loading 動態模組載入 =======
+    "importlib-metadata>=7.0.0",    # Plugin Discovery 動態發現與載入 Skills 插件模組的反射工具
 ]
 
 # --- Dependency Groups 開發環境工具 ---
