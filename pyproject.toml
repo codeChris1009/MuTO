@@ -16,6 +16,7 @@ dependencies = [
     # ======= MCP Server MCP 協議伺服器 =======
     "fastmcp>=2.0.0",               # MCP Server 基於 Model Context Protocol 的技能主機核心，負責動態加載與執行 Skills
     # ======= Database 連線擴充 =======
+    "sqlalchemy>=2.0.48",           # SQL Toolkit 與 ORM，提供資料庫抽象化與物件關聯映射功能
     "asyncpg>=0.30.0",              # Database Driver 高效能非同步 PostgreSQL 驅動，直連 EIDo
     "pgvector>=0.3.6",              # Vector DB Extension 讓 asyncpg 具備解讀向量型態的能力
     # ======= Redis & Caching 快取讀取 =======
