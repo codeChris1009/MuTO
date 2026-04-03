@@ -15,6 +15,9 @@ dependencies = [
     "python-dotenv>=1.2.2",         # Environment Variables 從 .env 檔案載入變數到環境中
     # ======= MCP Server MCP 協議伺服器 =======
     "fastmcp>=2.0.0",               # MCP Server 基於 Model Context Protocol 的技能主機核心，負責動態加載與執行 Skills
+    # ======= Database 連線擴充 =======
+    "asyncpg>=0.30.0",              # Database Driver 高效能非同步 PostgreSQL 驅動，直連 EIDo
+    "pgvector>=0.3.6",              # Vector DB Extension 讓 asyncpg 具備解讀向量型態的能力
     # ======= Redis & Caching 快取讀取 =======
     "redis[hiredis]>=7.4.0",        # Redis Client 讀取快取資料與狀態共享，使用 C 擴展提升性能
     # ======= Network & Resiliency 網路通訊與容錯 =======
