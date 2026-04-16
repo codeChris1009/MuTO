@@ -1,16 +1,10 @@
-import logging
+import uuid
 from fastmcp import FastMCP
+from core.logger import setup_logger, get_logger, bind_pipeline_context, clear_context
 
-# 1. 設置日誌系統 (muto.log)
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - [%(levelname)s] - %(name)s - %(message)s",
-    handlers=[
-        logging.FileHandler("muto.log", encoding="utf-8"),
-        logging.StreamHandler() # 同時輸出到控制台
-    ]
-)
-logger = logging.getLogger("muto-server")
+# 1. 設置結構化日誌系統
+setup_logger()
+logger = get_logger(__name__)
 
 # 2. 建立 MCP 伺服器
 mcp = FastMCP("MuTO")
@@ -18,13 +12,24 @@ mcp = FastMCP("MuTO")
 @mcp.tool()
 async def hello_tool(name: str) -> str:
     """A simple tool that greets the user by name."""
-    logger.info(f"收到 hello_tool 請求: name='{name}'")
-    
-    response = f"Hello {name} from MuTO Skills! (SSE Connection Successful)"
-    
-    logger.info(f"hello_tool 執行完畢，即將回傳結果。")
-    return response
+    # 綁定此次任務的 Context
+    pipeline_id = str(uuid.uuid4())
+    bind_pipeline_context(pipeline_id=pipeline_id, mcp_task_name="hello_tool")
+
+    await logger.ainfo("tool_execution_started", requested_name=name)
+
+    try:
+        response = f"Hello {name} from MuTO Skills! (SSE Connection Successful)"
+
+        await logger.ainfo("tool_execution_completed")
+        return response
+    except Exception as e:
+        await logger.aerror("tool_execution_failed", error=str(e), exc_info=True)
+        raise
+    finally:
+        # 清除 Context 避免干擾下一個獨立任務
+        clear_context()
 
 if __name__ == "__main__":
-    logger.info("MuTO MCP Server 正在啟動 (傳輸模式: SSE)...")
+    logger.info("server_starting", transport="sse", server_name="MuTO")
     mcp.run(transport="sse")
