@@ -1,13 +1,15 @@
 import asyncio
-from core.logger import setup_logger, get_logger, bind_pipeline_context
 
-# 1. 啟動時先呼叫 setup_logger() 來設定格式與輸出路徑 (包含 Console 與檔案)
-setup_logger()
+from core.logger import bind_pipeline_context, get_logger, setup_logger
 
-# 2. 獲取 logger 實例
-logger = get_logger(__name__)
 
 async def main():
+    # 1. 啟動時先呼叫 setup_logger() 來設定日誌格式與 Console 輸出
+    setup_logger()
+
+    # 2. 獲取 logger 實例
+    logger = get_logger(__name__)
+
     print("=== 同步/非同步 Log 測試 ===")
     # 同步日誌呼叫
     logger.info("starting_system", info="這是一條普通(同步)的 info 日誌", user="admin")
@@ -24,11 +26,12 @@ async def main():
     try:
         # 測試錯誤拋出
         1 / 0
-    except Exception as e:
+    except Exception:
         # 若發生 Exception，可以使用 exc_info=True 讓 structlog 自動擷取 Traceback
         await logger.aerror("execution_failed", error="除以零錯誤", exc_info=True)
 
     await logger.ainfo("execution_finished", step="done")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

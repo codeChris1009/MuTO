@@ -7,7 +7,7 @@
 - **結構化資料**：能在日誌中帶入任意的 key-value，方便除錯與資料關聯。
 - **Context 行為**：利用 ContextVars，一次綁定 `pipeline_id`，後續該請求的所有非同步 log 皆會自動帶上它，不需透過參數層層傳遞。
 - **無阻塞 I/O**：移除了傳統的 FileHandler 檔案寫入，全面導向 `stdout`。讓 FastAPI 的原生 AsyncIO 事件迴圈不會被寫檔拖慢，寫檔工作一律交由外部容器或收集器處理。
-- **非同步相容**：透過 `AsyncBoundLogger` 封裝，讓高併發的異步環境可以透過 `await logger.info()` 等方式直接寫入而不影響效能。
+- **非同步相容**：透過 `AsyncBoundLogger` 封裝，讓高併發的異步環境可以透過 `await logger.ainfo()`、`await logger.aerror()` 等非同步方法直接寫入而不影響效能。
 
 ## 設定與使用步驟
 
